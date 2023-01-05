@@ -153,7 +153,7 @@ export const signup = (data) => {
                                              <tbody>
                                                 <tr>
                                                    <td align="left" style="font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;" class="">
-                                                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size: 17px;font-weight: 600;line-height:26px;text-align:left;color: #1e2281;" class="">Hello hasnain11,</div>
+                                                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size: 17px;font-weight: 600;line-height:26px;text-align:left;color: #1e2281;" class="">Hello ${data?.username},</div>
                                                    </td>
                                                 </tr>
                                                 <tr>
@@ -170,7 +170,7 @@ export const signup = (data) => {
                                                 </tr>
                                                 <tr>
                                                    <td align="left" style="font-size:0px;padding:10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;" class="">
-                                                      <div style="font-family: serif;font-weight: 400;line-height:26px;text-align:left;color: #000000;font-size: 16px;" class="">You recently requested to reset the password for your account. <i><strong> Click the button below to proceed.</strong></i></div>
+                                                      <div style="font-family: serif;font-weight: 400;line-height:26px;text-align:left;color: #000000;font-size: 16px;" class="">We’d like to confirm that your account was created successfully. <i><strong> Click the button below to proceed.</strong></i></div>
                                                    </td>
                                                 </tr>
                                                 <tr>
@@ -184,9 +184,7 @@ export const signup = (data) => {
                                                          font-weight: 600;
                                                          cursor: pointer;
                                                          font-family: serif;
-                                                         "><a href="http://localhost:4000/auth/resetPassword?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFjMlZ5WDJsa0lqcDdJaVJ2YVdRaU9pSTJNek0xTmpsaVpXWTFOemN4WWpka01UQXdPVEEyTmpFaWZTd2laVzFoYVd3aU9pSm9ZWE51WVdsdU1URkFlVzl3YldGcGJDNWpiMjBpTENKbGVIQWlPakUyTmpVME1ESXdOREVzSW1semN5STZJbWgwZEhCek9sd3ZYQzloY0hCekxtTmxaR052YlcxbGNtTmxMbU52YlNJc0luUnZhMlZ1WDJsa0lqb3hOalkxTXprNE5EUXhmUS5JeHg3bE92NXN0QmJvRGdKVS1NRDdsaDBnZWFkaVFxdTdEY18xbnZqeENF" style="
-                                                         color: #fff !important;
-                                                         ">Click Here</a></button>
+                                                         "><a href=${data?.url} style="color: #fff !important;">Click Here</a></button>
                                                       </div>
                                                    </td>
                                                 </tr>

@@ -16,9 +16,8 @@ export const signup = async (req, res) => {
       const user = await userModel.create(payload);
       const token = await signJWT({ id: user?._id });
       await registrationMail({
-        email: user?.email,
-        name: user?.username,
-        url: `https://yopmail.com/en/wm?${token}`, // verification url
+        username: user?.username,
+        url: `${process.env.SERVER_URL}/api/auth/verify?token=${token}`, // verification url
       });
       res
         .status(200)
@@ -32,20 +31,29 @@ export const signup = async (req, res) => {
   }
 };
 
+export const verify = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const isValid = await verifyJWT(token);
+    if (isValid?.id) {
+      const isActive = await userModel.updateOne(
+        { _id: isValid?.id },
+        { $set: { isActive: true } }
+      );
+      if (isActive?.modifiedCount > 0) {
+        res.status(200).send("Your account verified successful, login to continue");
+      }
+    }
+  } catch (error) {
+    res.status(200).send("Something went wrong");
+  }
+};
+
 export const getUser = async (req, res) => {
   try {
     console.log("req.ip", req.ip);
     const user = await userModel.find({});
     res.status(200).send(user);
-  } catch (error) {
-    console.log("error", error);
-    res.status(200).send(error?.message);
-  }
-};
-
-export const test = async (req, res) => {
-  try {
-    res.status(200).send("route working");
   } catch (error) {
     console.log("error", error);
     res.status(200).send(error?.message);
