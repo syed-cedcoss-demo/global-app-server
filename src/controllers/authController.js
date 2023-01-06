@@ -58,7 +58,7 @@ export const login = async (req, res) => {
     if (user.length > 0) {
       const isValid = await verifyPassword(payload?.password, user?.[0].password);
       if (isValid) {
-        const token = await signJWT({ id: user?._id });
+        const token = await signJWT({ id: user?.[0]?._id });
         res.status(200).send({ success: true, token: token, msg: "success" });
       } else {
         res.status(404).send({ success: true, msg: "email id or password not valid" });

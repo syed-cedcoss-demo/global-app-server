@@ -4,8 +4,11 @@ import dotenv from "dotenv";
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+
 import { dbConnection } from "./src/config/dbConnection.js";
 import authRoute from "./src/routes/authRoute.js";
+import userRoute from "./src/routes/userRoute.js";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 dotenv.config();
@@ -29,6 +32,9 @@ app.get("/", (req, res) => res.status(200).send("<h2>Server is running...</h2>")
 
 //routes
 app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+
+//server
 app.listen(process.env.PORT, () => {
   console.log(
     chalk.bgYellowBright.bold(`Server is up and running on post ${process.env.PORT}`)
