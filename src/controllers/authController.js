@@ -42,7 +42,13 @@ export const verify = async (req, res) => {
         { $set: { isActive: true } }
       );
       if (isActive?.modifiedCount > 0) {
-        res.status(200).send("Your account verified successful, login to continue");
+        res.status(200).send(
+          `<h2 style="color:green">Your account verified successful, Redirecting to login page...</h2> <script>
+            setTimeout(()=>{
+                window.location.href="https://github.com/syed-cedcoss-demo/global-app-server"
+            },3000)
+            </script>`
+        );
       }
     }
   } catch (error) {
