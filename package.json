@@ -5,8 +5,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "development": "nodemon server.js",
+    "production": "node server.js"
   },
   "author": "Syed Hasnain Mehadi",
   "license": "ISC",

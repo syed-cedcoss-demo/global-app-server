@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { cronJob } from "./src/config/cron.js";
 import { dbConnection } from "./src/config/dbConnection.js";
 import authRoute from "./src/routes/authRoute.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -15,7 +14,6 @@ var corsOptions = {
   origin: ["http://localhost:3000", "http://localhost:4000"],
   optionsSuccessStatus: 200,
 };
-
 //Database Connect
 dbConnection();
 

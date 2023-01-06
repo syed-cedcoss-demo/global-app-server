@@ -49,6 +49,27 @@ export const verify = async (req, res) => {
   }
 };
 
+export const login = async (req, res) => {
+  try {
+    let payload = req.body;
+    const user = await userModel.find({ email: { $eq: payload?.email } }, { password: 1 });
+    if (user.length > 0) {
+      const isValid = await verifyPassword(payload?.password, user?.[0].password);
+      if (isValid) {
+        const token = await signJWT({ id: user?._id });
+        res.status(200).send({ success: true, token: token, msg: "success" });
+      } else {
+        res.status(404).send({ success: true, msg: "email id or password not valid" });
+      }
+    } else {
+      res.status(404).send({ success: true, msg: "email id or password not valid" });
+    }
+  } catch (error) {
+    console.log(chalk.bgRed.bold(error?.message));
+    res.status(200).send(error?.message);
+  }
+};
+
 export const getUser = async (req, res) => {
   try {
     console.log("req.ip", req.ip);
