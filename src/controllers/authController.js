@@ -17,17 +17,18 @@ export const signup = async (req, res) => {
       const token = await signJWT({ id: user?._id });
       await registrationMail({
         username: user?.username,
+        email: payload?.email,
         url: `${process.env.SERVER_URL}/api/auth/verify?token=${token}`, // verification url
       });
       res
         .status(200)
-        .send({ success: true, msg: "user successfuly registered, kidly check your mail" });
+        .send({ success: true, msg: "user successfully registered, kindly check your mail" });
     } else {
-      res.status(200).send({ success: true, msg: "user alrady exist" });
+      res.status(200).send({ success: true, msg: "user already exist" });
     }
   } catch (error) {
     console.log(chalk.bgRed.bold(error?.message));
-    res.status(200).send(error?.message);
+    res.status(500).send({ success: false, msg: "Internal server error" });
   }
 };
 
@@ -45,7 +46,8 @@ export const verify = async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(200).send("Something went wrong");
+    console.log(chalk.bgRed.bold(error?.message));
+    res.status(500).send({ success: false, msg: "Internal server error" });
   }
 };
 
@@ -70,13 +72,48 @@ export const login = async (req, res) => {
   }
 };
 
-export const getUser = async (req, res) => {
+export const forgetPassword = async (req, res) => {
   try {
-    console.log("req.ip", req.ip);
-    const user = await userModel.find({});
-    res.status(200).send(user);
+    const { email } = req.body;
+    const user = await userModel.find({ email: { $eq: email } });
+    if (user.length > 0) {
+      const token = await signJWT({ id: user?.[0]?._id });
+      await registrationMail({
+        username: user?.username,
+        email: email,
+        url: `${process.env.SERVER_URL}/api/auth/reset-password?token=${token}`, // verification url
+      });
+      res
+        .status(200)
+        .send({ success: true, msg: "Reset email successfully sent, kindly check your mail" });
+    } else {
+      res.status(404).send({ success: true, msg: "email id not valid" });
+    }
   } catch (error) {
-    console.log("error", error);
-    res.status(200).send(error?.message);
+    console.log(chalk.bgRed.bold(error?.message));
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const payload = req.body;
+    const isValid = await verifyJWT(payload?.token);
+    console.log("isValid", isValid);
+    if (isValid?.id) {
+      const hashPass = await hashPassword(payload.password);
+      const isActive = await userModel.updateOne(
+        { _id: isValid?.id },
+        { $set: { password: hashPass } }
+      );
+      if (isActive?.modifiedCount > 0) {
+        res.status(200).send("Password successfully updated");
+      }
+    } else {
+      res.status(402).send({ success: false, msg: "Token invalid" });
+    }
+  } catch (error) {
+    console.log(chalk.bgRed.bold(error?.message));
+    res.status(500).send({ success: false, msg: "Internal server error" });
   }
 };

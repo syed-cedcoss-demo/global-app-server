@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
-import { signup } from "../templates/email.js";
+import { forget, signup } from "../templates/email.js";
 dotenv.config();
 
 let transporter = nodemailer.createTransport({
@@ -31,15 +31,14 @@ export const registrationMail = async (data) => {
   }
 };
 
-export const adsMail = async (data) => {
+export const forgetPassEmail = async (data) => {
   try {
-    console.log("data", data);
     const info = await transporter.sendMail({
       from: process.env.EMAIL_ID,
       to: data?.email,
-      subject: "Diwali Offers",
-      text: "Diwali offers",
-      html: "html template",
+      subject: "Password Reset Mail",
+      text: "Password Reset Mail",
+      html: forget(data),
     });
     console.log(chalk.bgYellowBright.bold("sent email id:", info.messageId));
   } catch (error) {
